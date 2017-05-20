@@ -39,6 +39,10 @@ function langevin_kernel_discrepancy(points::Array{Float64},
     if !isa(kernel, SteinKernel)
         error("Must supply a subtype of SteinKernel")
     end
+    # make sure points is a 2-d array
+    if length(size(points)) == 1
+        points = reshape(points, (length(points), 1))
+    end
     # start the timer
     tic()
     ## Extract inputs
@@ -67,14 +71,12 @@ function langevin_kernel_discrepancy(points::Array{Float64},
     checkpoint_discrepancies = merge_worker_discrepancies(
         worker_discrepancies
     )
-    # only renormalize the discrepancies for the non-CSPD kernels
-    if !isa(kernel, SteinConditionallySPDKernel)
-        checkpoint_discrepancies = renormalize_discrepancies(
-            checkpoint_discrepancies,
-            weights,
-            sortedcheckpoints
-        )
-    end
+    # renormalize the discrepancies
+    checkpoint_discrepancies = renormalize_discrepancies(
+        checkpoint_discrepancies,
+        weights,
+        sortedcheckpoints
+    )
     # put the discrepancies back in original order
     discrepancies = Array(Float64, length(checkpoint_discrepancies))
     discrepancies[checkpointsindex] = checkpoint_discrepancies
@@ -105,11 +107,7 @@ function compute_gradlogdensities(gradlogdensity::Function,
                                   points::Array{Float64,2})
     n, d = size(points)
     gradlogdensities = @parallel (vcat) for i=1:n
-        gradlogdensity(points[i,:])
-    end
-    # HACK: we need to extend the dim of gradlogp if d is 1
-    if d == 1
-        gradlogdensities = reshape(gradlogdensities, size(points))
+        gradlogdensity(points[i,:])'
     end
     gradlogdensities
 end
