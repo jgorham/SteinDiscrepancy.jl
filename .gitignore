@@ -19,3 +19,4 @@
 *.pyc
 *.lot
 *.lof
+deps/deps.jl
