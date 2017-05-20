@@ -62,7 +62,7 @@ X = rand(100,2)
 # can be a string or a JuMP solver
 solver = "clp"
 result = stein_discrepancy(points=X, gradlogdensity=gradlogp, solver=solver, method="graph")
-discrepancy = vec(result.objective_value)
+discrepancy = vec(result.objectivevalue)
 ```
 
 The variable `discrepancy` here will encode the Stein discrepancy along each

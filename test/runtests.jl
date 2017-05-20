@@ -18,7 +18,17 @@ end
 imqkernel = SteinInverseMultiquadricKernel()
 
 # Graph Stein discrepancy bounded test
-@testset "Graph discrepancy test" begin
+@testset "Univariate Graph discrepancy test" begin
+    res = stein_discrepancy(points=UNIFORM_TESTDATA[:,1],
+                            gradlogdensity=uniform_gradlogp,
+                            solver="clp",
+                            method="graph",
+                            supportlowerbounds=[0.0],
+                            supportupperbounds=[1.0])
+
+    @test_approx_eq_eps res.objectivevalue[1] 0.15 1e-5
+end
+@testset "Multivariate Graph discrepancy test" begin
     res = stein_discrepancy(points=UNIFORM_TESTDATA,
                             gradlogdensity=uniform_gradlogp,
                             solver="clp",
