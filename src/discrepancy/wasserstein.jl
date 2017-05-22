@@ -184,15 +184,17 @@ end
 function approxwasserstein{T<:Number}(;
     points::AbstractArray{T,2}=[],
     weights::Array{Float64,1}=fill(1.0/size(points,1), size(points,1)),
-    target=nothing,
-    samplesize::Int=100,
+    targetsamplegen=nothing,
     replicates::Int=30,
     alpha::Float64=0.95,
     solver=nothing)
+    # make sure targetsamplegen is given
+    isa(targetsamplegen, Function) ||
+        error("Must supply targetsamplegen as a function to generate random samples.")
     # compute a few estimates of wasserstein metric
     wassersteinestimates = Array(Float64, replicates)
     for ii in 1:replicates
-        sample = rand(target, samplesize)
+        sample = targetsamplegen()
         (emd, numnodes, numedges, status) =
             wassersteindiscrete(xpoints=points,
                                 xweights=weights,
@@ -207,4 +209,3 @@ function approxwasserstein{T<:Number}(;
     zalpha = abs(Distributions.quantile(noise, (1.0 - alpha) / 2))
     return (wassmean - zalpha * wassstd, wassmean + zalpha * wassstd)
 end
-

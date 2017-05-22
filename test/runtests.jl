@@ -2,7 +2,8 @@ using Base.Test
 using Clp
 using SteinDiscrepancy:
     SteinInverseMultiquadricKernel,
-    stein_discrepancy
+    stein_discrepancy,
+    wassersteindiscrete
 
 # import data
 include("data/test_data.jl")
@@ -56,4 +57,15 @@ end
                             kernel=imqkernel)
 
     @test_approx_eq_eps res.discrepancy2 0.807566 1e-5
+end
+
+# Wassersteindiscrete test
+@testset "Wasserstein bivariate discrete test" begin
+    (emd, numnodes, numedges, status) =
+        wassersteindiscrete(xpoints=GAUSSIAN_TESTDATA,
+                            ypoints=UNIFORM_TESTDATA,
+                            solver="clp")
+
+    @test_approx_eq_eps emd 1.56 1e-5
+    @test status == :Optimal
 end
