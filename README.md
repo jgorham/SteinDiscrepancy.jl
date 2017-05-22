@@ -1,6 +1,6 @@
 # SteinDiscrepancy.jl
 
-## What is this so-called Stein discrepancy?
+## What's a Stein discrepancy?
 
 To improve the efficiency of Monte Carlo estimation, practitioners are
 turning to biased Markov chain Monte Carlo procedures that trade off
@@ -9,10 +9,10 @@ reduction in variance due to more rapid sampling can outweigh the bias
 introduced. However, the inexactness creates new challenges for sampler and
 parameter selection, since standard measures of sample quality like
 effective sample size do not account for asymptotic bias. To address these
-challenges, we introduce a new computable quality measure that quantifies
-the maximum discrepancy between sample and target expectations over a large
-class of test functions. This measure is what we are calling the
-Stein discrepancy.
+challenges, we introduced new computable quality measures, based on Stein's
+method, that quantify the maximum discrepancy between sample and target
+expectations over large classes of test functions. We call these measures
+Stein discrepancies.
 
 For a more detailed explanation, take a peek at the latest papers:
 
@@ -34,7 +34,7 @@ Stein discrepancy bounds standard probability metrics like the
 
 ## So how do I use it?
 
-This software has been tested on Julia v0.5.0. This release implements two
+This software has been tested on Julia v0.5. This release implements two
 classes of Stein discrepancies: graph Stein discrepancies and kernel Stein
 discrepancies.
 
