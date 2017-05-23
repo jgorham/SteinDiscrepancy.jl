@@ -61,7 +61,9 @@ end
 X = rand(100,2)
 # can be a string or a JuMP solver
 solver = "clp"
-result = stein_discrepancy(points=X, gradlogdensity=gradlogp, solver=solver, method="graph")
+result = stein_discrepancy(points=X, gradlogdensity=gradlogp, solver=solver, method="graph",
+                           supportlowerbounds=zeros(2),
+                           supportupperbounds=ones(2))
 discrepancy = vec(result.objectivevalue)
 ```
 
@@ -81,7 +83,7 @@ With a kernel in hand, computing the kernel Stein discrepancy is easy:
 ```
 # do the necessary imports
 using SteinDiscrepancy: SteinInverseMultiquadricKernel, stein_discrepancy
-# define the grad log density of standard normal Gaussian target
+# define the grad log density of standard normal target
 function gradlogp(x::Array{Float64,1})
     -x
 end
@@ -92,7 +94,7 @@ kernel = SteinInverseMultiquadricKernel()
 # compute the KSD2
 result = stein_discrepancy(points=X, gradlogdensity=gradlogp, method="kernel", kernel=kernel)
 # get the final ksd
-ksd = sqrt(res.discrepancy2)
+ksd = sqrt(result.discrepancy2)
 ```
 
 ## Summary of the Code
@@ -112,7 +114,7 @@ if this doesn't work for some reason, you can issue the following
 commands to compile the code in discrepancy/spanner:
 
 ```
-cd discrepancy/spanner
+cd <PACKAGE_DIR>/src/discrepancy/spanner
 make
 make clean
 ```
