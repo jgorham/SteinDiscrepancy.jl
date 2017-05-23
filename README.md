@@ -32,6 +32,36 @@ These latter two papers are a more gentle introduction describing how the
 Stein discrepancy bounds standard probability metrics like the
 [Wasserstein distance](https://en.wikipedia.org/wiki/Wasserstein_metric).
 
+## Where has it been used?
+
+Since its initial introduction in [Measuring Sample Quality with Stein's
+Method](http://arxiv.org/abs/1506.03039), the Stein discrepancy has been
+incorporated into a variety of applications including:
+
+1. Hypothesis testing
+   * [A Kernelized Stein Discrepancy for Goodness-of-fit Tests and Model Evaluation](https://arxiv.org/abs/1602.03253)
+   * [A Kernel Test of Goodness of Fit](https://arxiv.org/abs/1602.02964)
+2. Variational inference
+   * [Operator Variational Inference](https://arxiv.org/abs/1610.09033)
+   * [Two Methods For Wild Variational Inference](https://arxiv.org/abs/1612.00081)
+   * [Approximate Inference with Amortised MCMC](https://arxiv.org/abs/1702.08343)
+3. Importance sampling
+   * [Black-box Importance Sampling](https://arxiv.org/abs/1610.05247)
+   * [Stein Variational Adaptive Importance Sampling](https://arxiv.org/abs/1704.05201)
+4. Training generative adversarial networks (GANs)
+   * [Learning to Draw Samples: With Application to Amortized MLE for Generative Adversarial Learning](https://arxiv.org/abs/1611.01722)
+5. Training variational autoencoders (VAEs)
+   * [Stein Variational Autoencoder](https://arxiv.org/abs/1704.05155)
+6. Sample quality measurement
+   * [Measuring Sample Quality with Stein's Method](http://arxiv.org/abs/1506.03039)
+   * [Measuring Sample Quality with Diffusions](https://arxiv.org/abs/1611.06972)
+   * [Measuring Sample Quality with Kernels](https://arxiv.org/abs/1703.01717)
+7. Quadrature / sampling schemes
+   * [Control functionals for Monte Carlo integration](https://arxiv.org/abs/1410.2392)
+   * [Control functionals for Quasi-Monte Carlo integration](https://arxiv.org/abs/1501.03379)
+8. Model Fitting
+   * [Stein Variational Gradient Descent: A General Purpose Bayesian Inference Algorithm](https://arxiv.org/abs/1608.04471)
+
 ## So how do I use it?
 
 This software has been tested on Julia v0.5. This release implements two
@@ -47,21 +77,41 @@ Programming](https://jump.readthedocs.org/en/latest/)) to interface with
 these solvers; any of the supported JuMP LP solvers with do just fine.
 
 Once you have an LP solver installed, computing our measure is easy.
-Here's a quick example that will compute the Langevin graph Stein
-discrepancy for a bivariate uniform sample:
+Below we'll first show how to compute the Langevin graph Stein discrepancy
+for a univariate Gaussian target:
 
-```
+```julia
 # do the necessary imports
 using SteinDiscrepancy: stein_discrepancy
-# define the grad log density of target
+# define the grad log density of univariate Gaussian (we always expect vector inputs!)
+function gradlogp(x::Array{Float64,1})
+    -x
+end
+# generates 100 points from N(0,1)
+X = randn(100)
+# can be a string or a JuMP solver
+solver = "clp"
+result = stein_discrepancy(points=X, gradlogdensity=gradlogp, solver=solver, method="graph")
+graph_stein_discrepancy = result.objectivevalue[1]
+```
+
+Here's another example that will compute the Langevin graph Stein
+discrepancy for a bivariate uniform sample (notice this target distribution
+has a bounded support so these bounds become part of the input parameters):
+
+```julia
+# do the necessary imports
+using SteinDiscrepancy: stein_discrepancy
+# define the grad log density of bivariate uniform target
 function gradlogp(x::Array{Float64,1})
     zeros(size(x))
 end
-# generates 100 points
+# generates 100 points from Unif([0,1]^2)
 X = rand(100,2)
 # can be a string or a JuMP solver
 solver = "clp"
-result = stein_discrepancy(points=X, gradlogdensity=gradlogp, solver=solver, method="graph",
+result = stein_discrepancy(points=X, gradlogdensity=gradlogp,
+                           solver=solver, method="graph",
                            supportlowerbounds=zeros(2),
                            supportupperbounds=ones(2))
 discrepancy = vec(result.objectivevalue)
@@ -80,7 +130,7 @@ your own.
 
 With a kernel in hand, computing the kernel Stein discrepancy is easy:
 
-```
+```julia
 # do the necessary imports
 using SteinDiscrepancy: SteinInverseMultiquadricKernel, stein_discrepancy
 # define the grad log density of standard normal target
@@ -97,6 +147,12 @@ result = stein_discrepancy(points=X, gradlogdensity=gradlogp, method="kernel", k
 ksd = sqrt(result.discrepancy2)
 ```
 
+We should note that in order to compute the KSD for a target with a compact
+support, one must define a SteinKernel which imposes this property (and not
+use the `supportlowerbounds` and `supportupperbounds` arguments). See
+`SteinGaussianRectangularDomainKernel` in the `src/kernels` code directory
+for an example.
+
 ## Summary of the Code
 
 All code is available in the src directory of the repo. Many examples for
@@ -109,9 +165,9 @@ computing the stein_discrepancy are in the test directory.
 
 ### Compiling Code in discrepancy/spanner directory
 
-Our C++ code should be compiled when the package is built. However,
+**Our C++ code should be compiled when the package is built**. However,
 if this doesn't work for some reason, you can issue the following
-commands to compile the code in discrepancy/spanner:
+commands to compile the code in `src/discrepancy/spanner`:
 
 ```
 cd <PACKAGE_DIR>/src/discrepancy/spanner
