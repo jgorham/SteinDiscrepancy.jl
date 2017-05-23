@@ -15,6 +15,14 @@ end
 function gaussian_gradlogp(x::Array{Float64,1})
     -x
 end
+# define the covariance terms for the Riemannian-Langevin diffusion
+function volatility_covariance(x::Array{Float64,1})
+    p = length(x)
+    sqrt(1 + sum(x.^2)) * eye(p)
+end
+function grad_volatility_covariance(x::Array{Float64,1})
+    x / sqrt(1 + sum(x.^2))
+end
 
 imqkernel = SteinInverseMultiquadricKernel()
 
@@ -39,6 +47,18 @@ end
 
     @test_approx_eq_eps res.objectivevalue[1] 0.308 1e-5
     @test_approx_eq_eps res.objectivevalue[2] 0.31 1e-5
+end
+@testset "Riemannian Graph discrepancy test" begin
+    res = stein_discrepancy(points=GAUSSIAN_TESTDATA,
+                            gradlogdensity=gaussian_gradlogp,
+                            operator="riemannian-langevin",
+                            solver="clp",
+                            method="graph",
+                            volatility_covariance=volatility_covariance,
+                            grad_volatility_covariance=grad_volatility_covariance)
+
+    @test_approx_eq_eps res.objectivevalue[1] 6.19106 1e-5
+    @test_approx_eq_eps res.objectivevalue[2] 7.05982 1e-5
 end
 
 # Kernel Stein discrepancy test

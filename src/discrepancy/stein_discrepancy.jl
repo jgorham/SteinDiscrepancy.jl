@@ -11,40 +11,35 @@
 #     methods in order to construct the different discrepancies.
 
 function stein_discrepancy(; points=[],
-                           weights=fill(1/size(points,1), size(points,1)),
                            gradlogdensity=nothing,
                            method="graph",
                            operator="langevin",
                            kwargs...)
-
     # Check arguments
     isempty(points) && error("Must provide non-empty array of sample points")
     isa(gradlogdensity, Function) ||
         error("Must specify gradlogdensity of type Function")
 
     if method in ["graph", "classical"]
-        # Form weighted sample object
-        sample = SteinDiscrete(points, weights);
         # call appropriate graph discrepancy
         if method == "graph"
             if operator == "langevin"
-                langevin_graph_discrepancy(sample, gradlogdensity; kwargs...)
+                langevin_graph_discrepancy(;points=points, gradlogdensity=gradlogdensity, kwargs...)
             elseif operator == "riemannian-langevin"
-                riemannian_langevin_graph_discrepancy(sample, gradlogdensity; kwargs...)
+                riemannian_langevin_graph_discrepancy(;points=points, gradlogdensity=gradlogdensity, kwargs...)
             else
                 error("unrecognized operator: $(operator)")
             end
         elseif method == "classical"
             if operator == "langevin"
-                langevin_classical_discrepancy(sample, gradlogdensity; kwargs...)
+                langevin_classical_discrepancy(;points=points, gradlogdensity=gradlogdensity, kwargs...)
             else
                 error("unrecognized operator: $(operator)")
             end
         end
     elseif method == "kernel"
         if operator == "langevin"
-            langevin_kernel_discrepancy(points, weights, gradlogdensity;
-                                        kwargs...)
+            langevin_kernel_discrepancy(;points=points, gradlogdensity=gradlogdensity, kwargs...)
         else
             error("unrecognized operator: $(operator)")
         end

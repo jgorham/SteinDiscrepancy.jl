@@ -1,10 +1,13 @@
 # Computes graph Stein discrepancy based on the Langevin operator.
 # Args:
-#  sample - SteinDiscrete object representing a sample
+#  points - n x d array of sample points
+#  weights - n x 1 array of real-valued weights associated with sample points
+#    (default: equal weights)
 #  gradlogdensity - the gradlogdensity of the target distribution
 #  solver - optimization program solver supported by JuMP
-function langevin_graph_discrepancy(sample::SteinDiscrete,
-                                    gradlogdensity::Function;
+function langevin_graph_discrepancy(; points=[],
+                                    weights=fill(1/size(points,1), size(points,1)),
+                                    gradlogdensity=nothing,
                                     solver=nothing,
                                     kwargs...)
     # make sure solver is defined
@@ -13,7 +16,8 @@ function langevin_graph_discrepancy(sample::SteinDiscrete,
     end
     isa(solver, AbstractMathProgSolver) ||
         error("Must specify solver of type String or AbstractMathProgSolver")
-    ## Extract inputs
+    # Aggregate repeated samples
+    sample = SteinDiscrete(points, weights)
     points = sample.support
     weights = sample.weights
     n = length(weights)

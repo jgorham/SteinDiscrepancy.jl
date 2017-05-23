@@ -1,12 +1,15 @@
 # Computes classical Stein discrepancy based on the Langevin operator
 # for univariate target distributions.
 # Args:
-#  sample - SteinDiscrete object representing a sample
+#  points - n x d array of sample points
+#  weights - n x 1 array of real-valued weights associated with sample points
+#    (default: equal weights)
 #  gradlogdensity - the gradlogdensity of the target distribution
 #  solver - optimization program solver supported by JuMP that can solve
 #   a quadratically constrained quadratic program (QCQP)
-function langevin_classical_discrepancy(sample::SteinDiscrete,
-                                        gradlogdensity::Function;
+function langevin_classical_discrepancy(points=[],
+                                        weights=fill(1/size(points,1), size(points,1)),
+                                        gradlogdensity=nothing,
                                         solver=nothing,
                                         kwargs...)
     # make sure solver is defined
@@ -23,6 +26,7 @@ function langevin_classical_discrepancy(sample::SteinDiscrete,
         error("Gurobi must be installed to solve the classical discrepancy.")
     end
     # get primary objects
+    sample = SteinDiscrete(points, weights)
     points = sample.support
     weights = vec(sample.weights)
     n = length(weights)

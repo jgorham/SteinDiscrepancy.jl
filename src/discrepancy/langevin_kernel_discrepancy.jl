@@ -29,9 +29,9 @@
 #                mark intermediate n to compute the kernel. This is
 #                more optimized than calling this function len(checkpoints) times
 #  ncores - the number of cores to break the chunks into
-function langevin_kernel_discrepancy(points::Array{Float64},
-                                     weights::Array{Float64,1},
-                                     gradlogdensity::Function;
+function langevin_kernel_discrepancy(; points=[],
+                                     weights=fill(1/size(points,1), size(points,1)),
+                                     gradlogdensity=nothing,
                                      kernel=nothing,
                                      checkpoints=[],
                                      ncores=nprocs())

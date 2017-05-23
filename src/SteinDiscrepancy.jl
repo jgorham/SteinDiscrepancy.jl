@@ -18,6 +18,11 @@ module SteinDiscrepancy
            getsolver,
            # Main method for computing Stein discrepancy
            stein_discrepancy,
+           # Diffusion specific stein discrepancies
+           langevin_graph_discrepancy,
+           riemannian_langevin_graph_discrepancy,
+           langevin_classical_discrepancy,
+           langevin_kernel_discrepancy,
            # Result objects returned by affine stein discrepancy methods
            AffineDiscrepancyResult,
            # Result objects returned by langevin_kernel_discrepancy w/o checkpoints

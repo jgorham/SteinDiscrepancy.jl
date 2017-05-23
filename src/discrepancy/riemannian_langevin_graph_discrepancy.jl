@@ -18,13 +18,16 @@
 # T g = 2 <g, b> + 2 <a, grad g>.
 #
 # Args:
-#  sample - SteinDiscrete object representing a sample
+#  points - n x d array of sample points
+#  weights - n x 1 array of real-valued weights associated with sample points
+#    (default: equal weights)
 #  gradlogdensity - the gradlogdensity of the target distribution
 #  volatility_covariance - the matrix-valued function a = (1/2) sigma sigma^T
 #  grad_volatility_covariance - the vector-valued function grad a = <grad, a^t>
 #  solver - optimization program solver supported by JuMP
-function riemannian_langevin_graph_discrepancy(sample::SteinDiscrete,
-                                               gradlogdensity::Function;
+function riemannian_langevin_graph_discrepancy(; points=[],
+                                               weights=fill(1/size(points,1), size(points,1)),
+                                               gradlogdensity=nothing,
                                                volatility_covariance=nothing,
                                                grad_volatility_covariance=nothing,
                                                solver=nothing,
@@ -36,6 +39,7 @@ function riemannian_langevin_graph_discrepancy(sample::SteinDiscrete,
     isa(solver, AbstractMathProgSolver) ||
         error("Must specify solver of type String or AbstractMathProgSolver")
     ## Extract inputs
+    sample = SteinDiscrete(points, weights)
     points = sample.support
     weights = sample.weights
     n = length(weights)
