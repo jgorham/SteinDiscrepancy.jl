@@ -7,7 +7,7 @@ libsteinspanner = library_dependency("libsteinspanner",
 
 provides(SimpleBuild,
    (@build_steps begin
-        ChangeDirectory(joinpath(Pkg.dir("SteinDiscrepancy"), "src/discrepancy/spanner"))
+        ChangeDirectory(joinpath(dirname(@__FILE__), "../src/discrepancy/spanner"))
         MakeTargets(["libstein_spanner.so"])
     end), libsteinspanner, os = :Unix)
 
