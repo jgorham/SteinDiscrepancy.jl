@@ -18,6 +18,9 @@ module SteinDiscrepancy
            getsolver,
            # Main method for computing Stein discrepancy
            stein_discrepancy,
+           # The stein_discrepancy aliases
+           ksd,
+           gsd,
            # Diffusion specific stein discrepancies
            langevin_graph_discrepancy,
            riemannian_langevin_graph_discrepancy,

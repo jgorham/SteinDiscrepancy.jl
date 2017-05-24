@@ -3,6 +3,8 @@ using Clp
 using SteinDiscrepancy:
     SteinInverseMultiquadricKernel,
     stein_discrepancy,
+    ksd,
+    gsd,
     wassersteindiscrete
 
 # import data
@@ -28,12 +30,11 @@ imqkernel = SteinInverseMultiquadricKernel()
 
 # Graph Stein discrepancy bounded test
 @testset "Univariate Graph discrepancy test" begin
-    res = stein_discrepancy(points=UNIFORM_TESTDATA[:,1],
-                            gradlogdensity=uniform_gradlogp,
-                            solver="clp",
-                            method="graph",
-                            supportlowerbounds=[0.0],
-                            supportupperbounds=[1.0])
+    res = gsd(points=UNIFORM_TESTDATA[:,1],
+              gradlogdensity=uniform_gradlogp,
+              solver="clp",
+              supportlowerbounds=[0.0],
+              supportupperbounds=[1.0])
 
     @test_approx_eq_eps res.objectivevalue[1] 0.15 1e-5
 end
@@ -71,10 +72,9 @@ end
     @test_approx_eq_eps res.discrepancy2 0.269298 1e-5
 end
 @testset "Multivariate Kernel discrepancy test" begin
-    res = stein_discrepancy(points=GAUSSIAN_TESTDATA,
-                            gradlogdensity=gaussian_gradlogp,
-                            method="kernel",
-                            kernel=imqkernel)
+    res = ksd(points=GAUSSIAN_TESTDATA,
+              gradlogdensity=gaussian_gradlogp,
+              kernel=imqkernel)
 
     @test_approx_eq_eps res.discrepancy2 0.807566 1e-5
 end

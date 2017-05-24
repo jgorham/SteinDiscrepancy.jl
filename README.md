@@ -79,8 +79,8 @@ Below we'll first show how to compute the Langevin graph Stein discrepancy
 for a univariate Gaussian target:
 
 ```julia
-# do the necessary imports
-using SteinDiscrepancy: stein_discrepancy
+# import the gsd function (graph Stein discrepancy)
+using SteinDiscrepancy: gsd
 # define the grad log density of univariate Gaussian (we always expect vector inputs!)
 function gradlogp(x::Array{Float64,1})
     -x
@@ -89,7 +89,7 @@ end
 X = randn(100)
 # can be a string or a JuMP solver
 solver = "clp"
-result = stein_discrepancy(points=X, gradlogdensity=gradlogp, solver=solver, method="graph")
+result = gsd(points=X, gradlogdensity=gradlogp, solver=solver)
 graph_stein_discrepancy = result.objectivevalue[1]
 ```
 
@@ -99,7 +99,7 @@ has a bounded support so these bounds become part of the input parameters):
 
 ```julia
 # do the necessary imports
-using SteinDiscrepancy: stein_discrepancy
+using SteinDiscrepancy: gsd
 # define the grad log density of bivariate uniform target
 function gradlogp(x::Array{Float64,1})
     zeros(size(x))
@@ -108,10 +108,11 @@ end
 X = rand(100,2)
 # can be a string or a JuMP solver
 solver = "clp"
-result = stein_discrepancy(points=X, gradlogdensity=gradlogp,
-                           solver=solver, method="graph",
-                           supportlowerbounds=zeros(2),
-                           supportupperbounds=ones(2))
+result = gsd(points=X,
+             gradlogdensity=gradlogp,
+             solver=solver,
+             supportlowerbounds=zeros(2),
+             supportupperbounds=ones(2))
 discrepancy = vec(result.objectivevalue)
 ```
 
@@ -129,8 +130,8 @@ your own.
 With a kernel in hand, computing the kernel Stein discrepancy is easy:
 
 ```julia
-# do the necessary imports
-using SteinDiscrepancy: SteinInverseMultiquadricKernel, stein_discrepancy
+# import the kernel stein discrepancy function and kernel to use
+using SteinDiscrepancy: SteinInverseMultiquadricKernel, ksd
 # define the grad log density of standard normal target
 function gradlogp(x::Array{Float64,1})
     -x
@@ -140,7 +141,7 @@ X = randn(500, 3)
 # create the kernel instance
 kernel = SteinInverseMultiquadricKernel()
 # compute the KSD2
-result = stein_discrepancy(points=X, gradlogdensity=gradlogp, method="kernel", kernel=kernel)
+result = ksd(points=X, gradlogdensity=gradlogp, kernel=kernel)
 # get the final ksd
 ksd = sqrt(result.discrepancy2)
 ```

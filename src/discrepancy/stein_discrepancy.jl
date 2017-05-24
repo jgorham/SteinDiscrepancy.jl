@@ -47,3 +47,12 @@ function stein_discrepancy(; points=[],
         error("unrecognized method: $(method)")
     end
 end
+
+# stein_discrepancy aliases
+function ksd(;kwargs...)
+    stein_discrepancy(; method="kernel", kwargs...)
+end
+
+function gsd(;kwargs...)
+    stein_discrepancy(; method="graph", kwargs...)
+end
