@@ -143,7 +143,7 @@ kernel = SteinInverseMultiquadricKernel()
 # compute the KSD2
 result = ksd(points=X, gradlogdensity=gradlogp, kernel=kernel)
 # get the final ksd
-ksd = sqrt(result.discrepancy2)
+kernel_stein_discrepancy = sqrt(result.discrepancy2)
 ```
 
 We should note that in order to compute the KSD for a target with a compact
