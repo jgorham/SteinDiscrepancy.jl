@@ -9,6 +9,8 @@ provides(SimpleBuild,
    (@build_steps begin
         ChangeDirectory(joinpath(dirname(@__FILE__), "../src/discrepancy/spanner"))
         MakeTargets(["libstein_spanner.so"])
+        `mkdir -p ../../../deps/usr/lib`
+        `cp libstein_spanner.so ../../../deps/usr/lib`
     end), libsteinspanner, os = :Unix)
 
 @BinDeps.install Dict(:libsteinspanner => :libsteinspanner)
