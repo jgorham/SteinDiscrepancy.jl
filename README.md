@@ -34,7 +34,7 @@ Stein discrepancy bounds standard probability metrics like the
 
 ## Where has it been used?
 
-Since its initial introduction in [Measuring Sample Quality with Stein's
+Since its introduction in [Measuring Sample Quality with Stein's
 Method](http://arxiv.org/abs/1506.03039), the Stein discrepancy has been
 incorporated into a variety of applications including:
 
@@ -45,6 +45,7 @@ incorporated into a variety of applications including:
    * [Operator Variational Inference](https://arxiv.org/abs/1610.09033)
    * [Two Methods For Wild Variational Inference](https://arxiv.org/abs/1612.00081)
    * [Approximate Inference with Amortised MCMC](https://arxiv.org/abs/1702.08343)
+   * [Stein Variational Gradient Descent: A General Purpose Bayesian Inference Algorithm](https://arxiv.org/abs/1608.04471)
 3. Importance sampling
    * [Black-box Importance Sampling](https://arxiv.org/abs/1610.05247)
    * [Stein Variational Adaptive Importance Sampling](https://arxiv.org/abs/1704.05201)
@@ -56,11 +57,8 @@ incorporated into a variety of applications including:
    * [Measuring Sample Quality with Stein's Method](http://arxiv.org/abs/1506.03039)
    * [Measuring Sample Quality with Diffusions](https://arxiv.org/abs/1611.06972)
    * [Measuring Sample Quality with Kernels](https://arxiv.org/abs/1703.01717)
-7. Quadrature / sampling schemes
    * [Control functionals for Monte Carlo integration](https://arxiv.org/abs/1410.2392)
    * [Control functionals for Quasi-Monte Carlo integration](https://arxiv.org/abs/1501.03379)
-8. Model Fitting
-   * [Stein Variational Gradient Descent: A General Purpose Bayesian Inference Algorithm](https://arxiv.org/abs/1608.04471)
 
 ## So how do I use it?
 
@@ -165,9 +163,9 @@ computing the stein_discrepancy are in the test directory.
 
 ### Compiling Code in discrepancy/spanner directory
 
-**Our C++ code should be compiled when the package is built**. However,
-if this doesn't work for some reason, you can issue the following
-commands to compile the code in `src/discrepancy/spanner`:
+**Our C++ code should be compiled automatically when the package is
+built**. However, if this doesn't work for some reason, you can issue the
+following commands to compile the code in `src/discrepancy/spanner`:
 
 ```
 cd <PACKAGE_DIR>/src/discrepancy/spanner
