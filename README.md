@@ -57,8 +57,6 @@ incorporated into a variety of applications including:
    * [Measuring Sample Quality with Stein's Method](http://arxiv.org/abs/1506.03039)
    * [Measuring Sample Quality with Diffusions](https://arxiv.org/abs/1611.06972)
    * [Measuring Sample Quality with Kernels](https://arxiv.org/abs/1703.01717)
-   * [Control functionals for Monte Carlo integration](https://arxiv.org/abs/1410.2392)
-   * [Control functionals for Quasi-Monte Carlo integration](https://arxiv.org/abs/1501.03379)
 
 ## So how do I use it?
 
@@ -146,11 +144,10 @@ result = ksd(points=X, gradlogdensity=gradlogp, kernel=kernel)
 kernel_stein_discrepancy = sqrt(result.discrepancy2)
 ```
 
-We should note that in order to compute the KSD for a target with a compact
-support, one must define a SteinKernel which imposes this property (and not
-use the `supportlowerbounds` and `supportupperbounds` arguments). See
-`SteinGaussianRectangularDomainKernel` in the `src/kernels` code directory
-for an example.
+If your target has constrained support, you should simply use a kernel that 
+respects these constraints (no `supportlowerbounds` and `supportupperbounds` 
+arguments are needed).  See `SteinGaussianRectangularDomainKernel` in the 
+`src/kernels` code directory for an example.
 
 ## Summary of the Code
 
