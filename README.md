@@ -32,6 +32,10 @@ These latter two papers are a more gentle introduction describing how the
 Stein discrepancy bounds standard probability metrics like the
 [Wasserstein distance](https://en.wikipedia.org/wiki/Wasserstein_metric).
 
+Code built on `SteinDiscrepancy.jl` recreating all experiments in the above
+papers can be found at the repo
+[stein_discrepancy](https://github.com/jgorham/stein_discrepancy).
+
 ## Where has it been used?
 
 Since its introduction in [Measuring Sample Quality with Stein's
