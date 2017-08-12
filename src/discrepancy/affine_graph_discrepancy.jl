@@ -61,15 +61,15 @@ function affine_graph_discrepancy(sample::SteinDiscrete,
         # Compute differences between points connected by an edge
         diffs = points[edges[:,1],:] - points[edges[:,2],:]
         # Compute L1 distances between points connected by an edge
-        distances = sum(abs(diffs),2)
+        distances = sum(abs.(diffs),2)
         scaled_squared_distances = (c3/2)*distances.^2
     end
 
     ## Prepare return values
-    objval = Array(Float64, 1, d)
-    gopt = Array(Float64, n, d)
-    gradgopt = Array(Float64, n, d, d)
-    solvetime = Array(Float64, 1, d)
+    objval = Array{Float64}(1, d)
+    gopt = Array{Float64}(n, d)
+    gradgopt = Array{Float64}(n, d, d)
+    solvetime = Array{Float64}(1, d)
 
     # Distance cutoff for enforcing Lipschitz function constraints
     lipfunccutoff = 2*c1/c2

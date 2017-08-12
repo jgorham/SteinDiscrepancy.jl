@@ -1,6 +1,6 @@
 # SteinKernel
 
-abstract SteinKernel
+abstract type SteinKernel end
 
 ## METHODS TO IMPLEMENT ##
 function k(kernel::SteinKernel, x::Array{Float64, 1}, y::Array{Float64, 1})

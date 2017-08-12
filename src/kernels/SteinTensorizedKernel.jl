@@ -8,7 +8,7 @@
 # will be the same for each dimension i; the exception being
 # when the support is not the same amongst all dimensions.
 
-abstract SteinTensorizedKernel <: SteinKernel
+abstract type SteinTensorizedKernel <: SteinKernel end
 
 ### METHODS TO IMPLEMENT
 function ki(ker::SteinTensorizedKernel, x::Float64, y::Float64)

@@ -1,6 +1,6 @@
 # The returned result from a langevin kernel discrepancy
 
-abstract LangevinKernelBaseResult
+abstract type LangevinKernelBaseResult end
 
 type LangevinKernelResult <: LangevinKernelBaseResult
     # n x p matrix of distinct sample points

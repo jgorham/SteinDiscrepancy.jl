@@ -78,7 +78,7 @@ function langevin_kernel_discrepancy(; points=[],
         sortedcheckpoints
     )
     # put the discrepancies back in original order
-    discrepancies = Array(Float64, length(checkpoint_discrepancies))
+    discrepancies = Array{Float64}(length(checkpoint_discrepancies))
     discrepancies[checkpointsindex] = checkpoint_discrepancies
     # stop the timer
     solvetime = toc()
@@ -192,7 +192,7 @@ end
 
 # Private helper function to merge discrepancies from workers
 function merge_worker_discrepancies(
-    worker_discrepancies::Array{Any,1})
+    worker_discrepancies::Array{Array{Float64,1},1})
     # merge all the workers
     checkpoint_discrepancies = reduce(+, worker_discrepancies)
     checkpoint_discrepancies

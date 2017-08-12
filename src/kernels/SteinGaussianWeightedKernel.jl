@@ -8,7 +8,7 @@
 # This kernel is combined with the score function u(x) in order
 # generate the mean-zero RKHS.
 
-abstract SteinGaussianWeightedKernel <: SteinKernel
+abstract type SteinGaussianWeightedKernel <: SteinKernel end
 
 ### METHODS TO IMPLEMENT
 

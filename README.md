@@ -64,7 +64,7 @@ incorporated into a variety of applications including:
 
 ## So how do I use it?
 
-This software has been tested on Julia v0.5. This release implements two
+This software has been tested on Julia v0.6. This release implements two
 classes of Stein discrepancies: graph Stein discrepancies and kernel Stein
 discrepancies.
 

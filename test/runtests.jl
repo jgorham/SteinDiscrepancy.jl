@@ -36,7 +36,7 @@ imqkernel = SteinInverseMultiquadricKernel()
               supportlowerbounds=[0.0],
               supportupperbounds=[1.0])
 
-    @test_approx_eq_eps res.objectivevalue[1] 0.15 1e-5
+    @test res.objectivevalue[1] ≈ 0.15 atol=1.0e-5
 end
 @testset "Multivariate Graph discrepancy test" begin
     res = stein_discrepancy(points=UNIFORM_TESTDATA,
@@ -46,8 +46,8 @@ end
                             supportlowerbounds=zeros(size(UNIFORM_TESTDATA,2)),
                             supportupperbounds=ones(size(UNIFORM_TESTDATA,2)))
 
-    @test_approx_eq_eps res.objectivevalue[1] 0.308 1e-5
-    @test_approx_eq_eps res.objectivevalue[2] 0.31 1e-5
+    @test res.objectivevalue[1] ≈ 0.308 atol=1.0e-5
+    @test res.objectivevalue[2] ≈ 0.31 atol=1.0e-5
 end
 @testset "Riemannian Graph discrepancy test" begin
     res = stein_discrepancy(points=GAUSSIAN_TESTDATA,
@@ -58,8 +58,8 @@ end
                             volatility_covariance=volatility_covariance,
                             grad_volatility_covariance=grad_volatility_covariance)
 
-    @test_approx_eq_eps res.objectivevalue[1] 6.19106 1e-5
-    @test_approx_eq_eps res.objectivevalue[2] 7.05982 1e-5
+    @test res.objectivevalue[1] ≈ 6.19106 atol=1.0e-5
+    @test res.objectivevalue[2] ≈ 7.05982 atol=1.0e-5
 end
 
 # Kernel Stein discrepancy test
@@ -69,14 +69,14 @@ end
                             method="kernel",
                             kernel=imqkernel)
 
-    @test_approx_eq_eps res.discrepancy2 0.269298 1e-5
+    @test res.discrepancy2 ≈ 0.269298 atol=1.0e-5
 end
 @testset "Multivariate Kernel discrepancy test" begin
     res = ksd(points=GAUSSIAN_TESTDATA,
               gradlogdensity=gaussian_gradlogp,
               kernel=imqkernel)
 
-    @test_approx_eq_eps res.discrepancy2 0.807566 1e-5
+    @test res.discrepancy2 ≈ 0.807566 atol=1.0e-5
 end
 
 # Wassersteindiscrete test
@@ -86,6 +86,6 @@ end
                             ypoints=UNIFORM_TESTDATA,
                             solver="clp")
 
-    @test_approx_eq_eps emd 1.56 1e-5
+    @test emd ≈ 1.56 atol=1e-5
     @test status == :Optimal
 end

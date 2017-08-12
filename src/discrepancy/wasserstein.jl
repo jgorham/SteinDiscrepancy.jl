@@ -192,7 +192,7 @@ function approxwasserstein{T<:Number}(;
     isa(targetsamplegen, Function) ||
         error("Must supply targetsamplegen as a function to generate random samples.")
     # compute a few estimates of wasserstein metric
-    wassersteinestimates = Array(Float64, replicates)
+    wassersteinestimates = Array{Float64}(replicates)
     for ii in 1:replicates
         sample = targetsamplegen()
         (emd, numnodes, numedges, status) =

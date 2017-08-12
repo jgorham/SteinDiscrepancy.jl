@@ -16,7 +16,7 @@
 # See http://www.gaussianprocess.org/gpml/chapters/RW4.pdf
 # or http://arxiv.org/pdf/1204.6448.pdf for more details.
 
-abstract SteinMaternWeightedKernel <: SteinKernel
+abstract type SteinMaternWeightedKernel <: SteinKernel end
 
 ### METHODS TO IMPLEMENT
 

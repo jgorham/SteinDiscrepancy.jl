@@ -52,8 +52,8 @@ function riemannian_langevin_graph_discrepancy(; points=[],
         error("For riemannian langevin methods, you must supply the grad_volatility_covariance")
 
     # Now prepare the coefficients for g and grad g
-    gobjcoefficients = Array(Float64, n, d)
-    gradgobjcoefficients = Array(Float64, n, d, d)
+    gobjcoefficients = Array{Float64}(n, d)
+    gradgobjcoefficients = Array{Float64}(n, d, d)
     for i in 1:n
         xi = points[i,:]
         wi = weights[i]

@@ -53,7 +53,7 @@ function k0(ker::SteinInverseMultiquadricKernel,
     d = length(x)
 
     z = x - y
-    r2 = sumabs2(z)
+    r2 = sum(abs2, z)
     base = c2 + r2
     base_beta = base^(-beta)
     base_beta1 = base_beta / base
