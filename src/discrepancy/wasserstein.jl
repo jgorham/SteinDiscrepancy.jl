@@ -85,11 +85,8 @@ function wassersteindiscrete{T<:Number}(;
     # make sure samples are same dimensionality
     @assert size(xpoints, 2) == size(ypoints, 2)
     # make sure solver is defined
-    if isa(solver, AbstractString)
-        solver = getsolver(solver)
-    end
     isa(solver, AbstractMathProgSolver) ||
-        error("Must specify solver of type String or AbstractMathProgSolver")
+        error("Must specify solver of type AbstractMathProgSolver")
     # setup discrete distributions
     xdist = SteinDiscrete(xpoints, xweights)
     nx = size(xdist.support, 1)

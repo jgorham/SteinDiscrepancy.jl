@@ -35,6 +35,8 @@ Stein discrepancy bounds standard probability metrics like the
 Code built on `SteinDiscrepancy.jl` recreating all experiments in the above
 papers can be found at the repo
 [stein_discrepancy](https://github.com/jgorham/stein_discrepancy).
+Please note that experiments in aforementioned repo all run on v0.0.2 of
+this package with Julia v0.5.
 
 ## Where has it been used?
 
@@ -89,8 +91,9 @@ function gradlogp(x::Array{Float64,1})
 end
 # generates 100 points from N(0,1)
 X = randn(100)
-# can be a string or a JuMP solver
-solver = "clp"
+# use a solver covered by JuMP
+using Clp
+solver = Clp.ClpSolver(LogLevel=4)
 result = gsd(points=X, gradlogdensity=gradlogp, solver=solver)
 graph_stein_discrepancy = result.objectivevalue[1]
 ```
@@ -108,8 +111,9 @@ function gradlogp(x::Array{Float64,1})
 end
 # generates 100 points from Unif([0,1]^2)
 X = rand(100,2)
-# can be a string or a JuMP solver
-solver = "clp"
+# use a solver covered by JuMP
+using Clp
+solver = Clp.ClpSolver(LogLevel=4)
 result = gsd(points=X,
              gradlogdensity=gradlogp,
              solver=solver,

@@ -27,12 +27,13 @@ function grad_volatility_covariance(x::Array{Float64,1})
 end
 
 imqkernel = SteinInverseMultiquadricKernel()
+solver = Clp.ClpSolver(LogLevel=4)
 
 # Graph Stein discrepancy bounded test
 @testset "Univariate Graph discrepancy test" begin
     res = gsd(points=UNIFORM_TESTDATA[:,1],
               gradlogdensity=uniform_gradlogp,
-              solver="clp",
+              solver=solver,
               supportlowerbounds=[0.0],
               supportupperbounds=[1.0])
 
@@ -41,7 +42,7 @@ end
 @testset "Multivariate Graph discrepancy test" begin
     res = stein_discrepancy(points=UNIFORM_TESTDATA,
                             gradlogdensity=uniform_gradlogp,
-                            solver="clp",
+                            solver=solver,
                             method="graph",
                             supportlowerbounds=zeros(size(UNIFORM_TESTDATA,2)),
                             supportupperbounds=ones(size(UNIFORM_TESTDATA,2)))
@@ -53,7 +54,7 @@ end
     res = stein_discrepancy(points=GAUSSIAN_TESTDATA,
                             gradlogdensity=gaussian_gradlogp,
                             operator="riemannian-langevin",
-                            solver="clp",
+                            solver=solver,
                             method="graph",
                             volatility_covariance=volatility_covariance,
                             grad_volatility_covariance=grad_volatility_covariance)
@@ -84,7 +85,7 @@ end
     (emd, numnodes, numedges, status) =
         wassersteindiscrete(xpoints=GAUSSIAN_TESTDATA,
                             ypoints=UNIFORM_TESTDATA,
-                            solver="clp")
+                            solver=solver)
 
     @test emd ≈ 1.56 atol=1e-5
     @test status == :Optimal

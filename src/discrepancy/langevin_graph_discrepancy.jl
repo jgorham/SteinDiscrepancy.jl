@@ -11,11 +11,8 @@ function langevin_graph_discrepancy(; points=[],
                                     solver=nothing,
                                     kwargs...)
     # make sure solver is defined
-    if isa(solver, AbstractString)
-        solver = getsolver(solver)
-    end
     isa(solver, AbstractMathProgSolver) ||
-        error("Must specify solver of type String or AbstractMathProgSolver")
+        error("Must specify solver of type AbstractMathProgSolver")
     # Aggregate repeated samples
     sample = SteinDiscrete(points, weights)
     points = sample.support

@@ -22,8 +22,8 @@
 #      the objective for gj
 #  gradgobjcoefficients - a n x d x d tensor so [:,:,j] represents
 #      the coefficients of grad gj on each row
-#  solver - optimization program solver supported by JuMP
-#  operator - the operator being used for the objective
+#  solver - optimization program solver supported by JuMP. Examples:
+
 function affine_graph_discrepancy(sample::SteinDiscrete,
                                   gobjcoefficients::Array{Float64,2},
                                   gradgobjcoefficients::Array{Float64,3},

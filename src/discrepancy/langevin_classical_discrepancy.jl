@@ -12,18 +12,13 @@ function langevin_classical_discrepancy(points=[],
                                         gradlogdensity=nothing,
                                         solver=nothing,
                                         kwargs...)
-    # make sure solver is defined
-    if isa(solver, AbstractString)
-        solver = getsolver(solver)
-    end
     # we require that the solver is Gurobi or else the quadratic expressions
     # don't work
     try
-        eval(Expr(:import,:Gurobi))
         isa(solver, Main.Gurobi.GurobiSolver) ||
             error("The solver used must be Gurobi for classical discrepancies.")
     catch
-        error("Gurobi must be installed to solve the classical discrepancy.")
+        error("Gurobi must be used as the solver to solve the classical discrepancy.")
     end
     # get primary objects
     sample = SteinDiscrete(points, weights)

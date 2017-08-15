@@ -14,8 +14,6 @@ module SteinDiscrepancy
     import Distributions.quantile
 
     export SteinDiscrete,
-           # Utility function for getting the solver
-           getsolver,
            # Main method for computing Stein discrepancy
            stein_discrepancy,
            # The stein_discrepancy aliases
@@ -83,7 +81,6 @@ module SteinDiscrepancy
     include("kernels/SteinInverseMultiquadricKernel.jl")
 
     ### discrepancy
-    include("discrepancy/getsolver.jl")
     # Spanner files and utilities
     include("discrepancy/spanner.jl")
     include("discrepancy/l1spanner.jl")
