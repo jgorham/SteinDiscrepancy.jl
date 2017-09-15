@@ -2,6 +2,7 @@ using Base.Test
 using Clp
 using SteinDiscrepancy:
     SteinInverseMultiquadricKernel,
+    SteinRectangularDomainMetaKernel,
     stein_discrepancy,
     ksd,
     gsd,
@@ -27,6 +28,7 @@ function grad_volatility_covariance(x::Array{Float64,1})
 end
 
 imqkernel = SteinInverseMultiquadricKernel()
+imqrectkernel = SteinRectangularDomainMetaKernel(imqkernel, [0., 0.], [1., 1.])
 solver = Clp.ClpSolver(LogLevel=4)
 
 # Graph Stein discrepancy bounded test
@@ -89,4 +91,13 @@ end
 
     @test emd ≈ 1.56 atol=1e-5
     @test status == :Optimal
+end
+
+# Stein Meta Kernel test
+@testset "Rectangular domain meta kernel test" begin
+    res = ksd(points=UNIFORM_TESTDATA,
+              gradlogdensity=uniform_gradlogp,
+              kernel=imqrectkernel)
+
+    @test res.discrepancy2 ≈ 0.0064761153 atol=1.0e-8
 end

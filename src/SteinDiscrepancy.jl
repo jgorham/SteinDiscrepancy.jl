@@ -44,7 +44,6 @@ module SteinDiscrepancy
            SteinParzenARKernel,
            SteinChampionLenardMillsKernel,
            SteinGaussianWeightedKernel,
-           SteinGaussianRectangularDomainKernel,
            SteinGaussianPowerKernel,
            SteinGaussianUnboundedPowerKernel,
            SteinGaussianKernel,
@@ -52,6 +51,7 @@ module SteinDiscrepancy
            SteinMaternRadialKernel,
            SteinPolyharmonicSplineKernel,
            SteinInverseMultiquadricKernel,
+           SteinRectangularDomainMetaKernel,
            ### kernel utility functions
            k,
            gradxk,
@@ -66,7 +66,6 @@ module SteinDiscrepancy
     include("kernels/SteinKernel.jl")
     include("kernels/SteinTensorizedKernel.jl")
     include("kernels/SteinGaussianWeightedKernel.jl")
-    include("kernels/SteinGaussianRectangularDomainKernel.jl")
     include("kernels/SteinGaussianPowerKernel.jl")
     include("kernels/SteinGaussianUnboundedPowerKernel.jl")
     include("kernels/SteinGaussianKernel.jl")
@@ -79,6 +78,8 @@ module SteinDiscrepancy
     include("kernels/SteinMaternPowerKernel.jl")
     include("kernels/SteinMaternUnboundedPowerKernel.jl")
     include("kernels/SteinInverseMultiquadricKernel.jl")
+    # meta kernels
+    include("kernels/SteinRectangularDomainMetaKernel.jl")
 
     ### discrepancy
     # Spanner files and utilities

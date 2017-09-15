@@ -154,8 +154,30 @@ kernel_stein_discrepancy = sqrt(result.discrepancy2)
 
 If your target has constrained support, you should simply use a kernel that 
 respects these constraints (no `supportlowerbounds` and `supportupperbounds` 
-arguments are needed).  See `SteinGaussianRectangularDomainKernel` in the 
-`src/kernels` code directory for an example.
+arguments are needed). In the case you have a rectangular domain, the
+`SteinRectangularDomainMetaKernel` should be useful. Here's an example
+for a bivariate uniform target:
+
+```julia
+using SteinDiscrepancy:
+    SteinRectangularDomainMetaKernel,
+    SteinInverseMultiquadricKernel,
+    ksd
+# define the grad log density of standard normal target
+function gradlogp(x::Array{Float64,1})
+    zeros(length(d))
+end
+# grab sample
+X = rand(500, 2)
+# create the base kernel instance
+imqkernel = SteinInverseMultiquadricKernel()
+# clip the kernel to have the target distribution's domain
+imqrectkernel = SteinRectangularDomainMetaKernel(imqkernel, [0., 0.], [1., 1.])
+# compute the KSD2
+result = ksd(points=X, gradlogdensity=gradlogp, kernel=imqrectkernel)
+# get the final ksd
+kernel_stein_discrepancy = sqrt(result.discrepancy2)
+```
 
 ## Summary of the Code
 
