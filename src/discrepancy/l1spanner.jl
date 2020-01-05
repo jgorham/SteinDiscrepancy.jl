@@ -16,7 +16,7 @@
 # constant used for numerical issues
 EPS = 10 * eps(0.0)
 
-function makel1spanner{T<:Number}(X::AbstractArray{T,2})
+function makel1spanner(X::AbstractArray{T,2}) where {T<:Number}
     n, d = size(X)
     # copy so we don't corrupt the original data
     Xnew = copy(X)
@@ -26,10 +26,10 @@ function makel1spanner{T<:Number}(X::AbstractArray{T,2})
     return (Xnew, E)
 end
 
-function _makel1spanner!{T<:Number}(X::AbstractArray{T,2},
-                                    E::Array{Tuple{Int,Int},1},
-                                    Xidx::Array{Int,1},
-                                    k::Int)
+function _makel1spanner!(X::AbstractArray{T,2},
+                         E::Array{Tuple{Int,Int},1},
+                         Xidx::Array{Int,1},
+                         k::Int) where {T<:Number}
     # initialize the iterative counters
     Xindexs = Array{Int,1}[]
     k_indexs = Int[]

@@ -4,7 +4,7 @@
 #
 # where ||.|| is the L2 norm.
 
-type SteinGaussianKernel <: SteinGaussianWeightedKernel
+mutable struct SteinGaussianKernel <: SteinGaussianWeightedKernel
     # the beta parameter
     beta::Float64
 end

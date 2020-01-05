@@ -11,7 +11,7 @@
 #
 # See Section 5.3 of http://arxiv.org/pdf/1204.6448.pdf.
 
-type SteinPolyharmonicSplineKernel <: SteinKernel
+mutable struct SteinPolyharmonicSplineKernel <: SteinKernel
     # the order of the derivative operator
     m::Int
 end

@@ -11,7 +11,7 @@
 # |u|_H = 4*alpha*gamma^2*u(a)^2 + 4*alpha*u'(a)^2 +
 #  \int_[a,b] (u''(t) + 2*alpha^2*u'(t) + gamma^2*u(t))^2
 
-type SteinParzenARKernel <: SteinTensorizedKernel
+mutable struct SteinParzenARKernel <: SteinTensorizedKernel
     # the alpha parameter
     alpha::Float64
     # the gamma parameter

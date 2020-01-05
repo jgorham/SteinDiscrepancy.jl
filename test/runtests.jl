@@ -1,5 +1,6 @@
-using Base.Test
+using Test
 using Clp
+using LinearAlgebra
 using SteinDiscrepancy:
     SteinInverseMultiquadricKernel,
     SteinRectangularDomainMetaKernel,
@@ -21,7 +22,7 @@ end
 # define the covariance terms for the Riemannian-Langevin diffusion
 function volatility_covariance(x::Array{Float64,1})
     p = length(x)
-    sqrt(1 + sum(x.^2)) * eye(p)
+    sqrt(1 + sum(x.^2)) * I
 end
 function grad_volatility_covariance(x::Array{Float64,1})
     x / sqrt(1 + sum(x.^2))

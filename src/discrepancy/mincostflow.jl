@@ -15,11 +15,11 @@
 #   flow - the flows to achieve the min cost
 #   status - the status of the LP solver.
 
-function mincostflow{T<:Number}(X::AbstractArray{T,2},
-                                E::Array{Tuple{Int,Int},1},
-                                q1::AbstractArray{T,1},
-                                q2::AbstractArray{T,1},
-                                solver::AbstractMathProgSolver)
+function mincostflow(X::AbstractArray{T,2},
+                     E::Array{Tuple{Int,Int},1},
+                     q1::AbstractArray{T,1},
+                     q2::AbstractArray{T,1},
+                     solver::AbstractMathProgSolver) where {T<:Number}
     # number of points
     (n, d) = size(X)
     # size of supports
@@ -34,7 +34,7 @@ function mincostflow{T<:Number}(X::AbstractArray{T,2},
     # flow on edges, twice the number for both directions
     @variable(m, f[i=1:(2*numedges)] >= 0)
     # construct objective
-    costobjective = AffExpr(f[1:(2*numedges)], [dists; dists], 0.0)
+    costobjective = f[1:(2*numedges)]'[dists; dists]
     @objective(m, Min, costobjective)
     # first we index vertices by incident edges
     inedges_for_node = Dict{Int,Array{Int,1}}()

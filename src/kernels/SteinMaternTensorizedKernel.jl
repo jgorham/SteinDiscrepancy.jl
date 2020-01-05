@@ -8,7 +8,7 @@
 #
 # |u|_H^2 = int_R sigma^4 f(u)^2 + 2*sigma^2 f'(u)^2 + f''(u)^2 du
 
-type SteinMaternTensorizedKernel <: SteinTensorizedKernel
+mutable struct SteinMaternTensorizedKernel <: SteinTensorizedKernel
     sigma::Float64
 end
 

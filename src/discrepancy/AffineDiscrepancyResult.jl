@@ -1,6 +1,6 @@
 # The returned result from a affine discrepancy
 
-type AffineDiscrepancyResult
+mutable struct AffineDiscrepancyResult
     # n x p matrix of distinct sample points
     points::Array{Float64}
     # n x 1 vector of weights associated with each sample
