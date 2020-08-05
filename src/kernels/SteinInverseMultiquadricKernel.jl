@@ -4,7 +4,7 @@
 #
 # where r = |x-y|_2.
 
-type SteinInverseMultiquadricKernel <: SteinKernel
+mutable struct SteinInverseMultiquadricKernel <: SteinKernel
     beta::Float64       # -beta is exponent
     c2::Float64         # equal to c^2
     SteinInverseMultiquadricKernel(beta, c2) = (
@@ -53,7 +53,7 @@ function k0(ker::SteinInverseMultiquadricKernel,
     d = length(x)
 
     z = x - y
-    r2 = sum(abs2, z)
+    r2 = z'z
     base = c2 + r2
     base_beta = base^(-beta)
     base_beta1 = base_beta / base

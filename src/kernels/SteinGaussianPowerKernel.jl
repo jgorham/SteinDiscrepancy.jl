@@ -6,7 +6,7 @@
 # where ||.|| is the L2 norm. This is gauranteed to enforce
 # that k is a universal kernel that vanishes at infinity.
 
-type SteinGaussianPowerKernel <: SteinGaussianWeightedKernel
+mutable struct SteinGaussianPowerKernel <: SteinGaussianWeightedKernel
     # the alpha parameter
     alpha::Float64
     # the beta parameter

@@ -23,12 +23,12 @@
 # Translating above is trivial.
 
 # utility for grabbing the support bounds
-type SupportBound
+mutable struct SupportBound
     lb::Float64
     ub::Float64
 end
 
-type SteinChampionLenardMillsKernel <: SteinTensorizedKernel
+mutable struct SteinChampionLenardMillsKernel <: SteinTensorizedKernel
     support::Array{SupportBound,1}
 end
 

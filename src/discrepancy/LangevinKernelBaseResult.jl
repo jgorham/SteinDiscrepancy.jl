@@ -2,7 +2,7 @@
 
 abstract type LangevinKernelBaseResult end
 
-type LangevinKernelResult <: LangevinKernelBaseResult
+mutable struct LangevinKernelResult <: LangevinKernelBaseResult
     # n x p matrix of distinct sample points
     points::Array{Float64}
     # n x 1 vector of weights associated with each sample
@@ -13,7 +13,7 @@ type LangevinKernelResult <: LangevinKernelBaseResult
     solvetime::Float64
 end
 
-type LangevinKernelCheckpointsResult <: LangevinKernelBaseResult
+mutable struct LangevinKernelCheckpointsResult <: LangevinKernelBaseResult
     # n x p matrix of distinct sample points
     points::Array{Float64}
     # n x 1 vector of weights associated with each sample

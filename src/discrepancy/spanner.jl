@@ -12,10 +12,10 @@
 #     the complete graph on X (empty by default)
 function getspanneredges(X::Array{Float64};
                          t::Float64=2.0,
-                         valid_edges::Array{Int64,2}=Array{Int64}(0,0))
+                         valid_edges::Array{Int64,2}=Array{Int64}(undef, 0,0))
     n = size(X, 1)
     # Return empty edge set of only one point in X
-    n > 1 || return Array{Int64}(0,2)
+    n > 1 || return Array{Int64}(undef, 0,2)
 
     p = size(X, 2)
     if p == 1 && isempty(valid_edges)
@@ -25,8 +25,8 @@ function getspanneredges(X::Array{Float64};
         return [sortorder[1:n-1] sortorder[2:n]]
     end
 
-    pointlist = vec(X.');
-    valid_edges_vec = vec(valid_edges.');
+    pointlist = Array(X');
+    valid_edges_vec = Array(valid_edges');
     num_valid_edges = size(valid_edges, 1);
     spannerlib = Libdl.dlopen(libsteinspanner);
 
@@ -38,14 +38,14 @@ function getspanneredges(X::Array{Float64};
     );
 
     numedges = unsafe_load(ed, 1);
-    c_edges = Array{Cint}(2*numedges);
+    c_edges = Array{Cint}(undef, 2*numedges);
 
     ccall(
         Libdl.dlsym(spannerlib, :load_edges),
-        Void,
-        (Ptr{Void}, Ptr{Cint}),
+        Cvoid,
+        (Ptr{Cvoid}, Ptr{Cint}),
         ed, c_edges
     );
 
-    return reshape(c_edges + 1, 2, convert(Int64, numedges)).';
+    return reshape(c_edges .+ 1, (2, convert(Int64, numedges)))';
 end

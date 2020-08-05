@@ -44,44 +44,45 @@ function langevin_kernel_discrepancy(; points=[],
         points = reshape(points, (length(points), 1))
     end
     # start the timer
-    tic()
-    ## Extract inputs
-    weights = vec(weights)
-    n = length(weights)
-    d = size(points,2)
-    nocheckpoints = (length(checkpoints) == 0)
-    # initialize checkpoints and sort
-    if nocheckpoints
-        sortedcheckpoints = [n]
-        checkpointsindex = [1]
-    else
-        checkpointsindex = sortperm(checkpoints)
-        sortedcheckpoints = checkpoints[checkpointsindex]
+    elapsed = @elapsed begin
+    	## Extract inputs
+	weights = vec(weights)
+        n = length(weights)
+        d = size(points,2)
+        nocheckpoints = (length(checkpoints) == 0)
+        # initialize checkpoints and sort
+        if nocheckpoints
+            sortedcheckpoints = [n]
+            checkpointsindex = [1]
+        else
+            checkpointsindex = sortperm(checkpoints)
+            sortedcheckpoints = checkpoints[checkpointsindex]
+        end
+        # Compute score functions for each observation
+        gradlogdensities = compute_gradlogdensities(gradlogdensity, points)
+        # chunk up the data in big batches
+        datachunks = Any[
+            Any[kernel, points, gradlogdensities, weights, sortedcheckpoints, i, ncores]
+            for i in 1:ncores
+        ]
+        # parallelize the work
+        worker_discrepancies = pmap((args) -> compute_kernel_sums(args...), datachunks)
+        # merge the worker results and reweight discrepancies
+        checkpoint_discrepancies = merge_worker_discrepancies(
+            worker_discrepancies
+        )
+        # renormalize the discrepancies
+        checkpoint_discrepancies = renormalize_discrepancies(
+            checkpoint_discrepancies,
+            weights,
+            sortedcheckpoints
+        )
+        # put the discrepancies back in original order
+        discrepancies = Array{Float64}(undef, length(checkpoint_discrepancies))
+        discrepancies[checkpointsindex] = checkpoint_discrepancies
     end
-    # Compute score functions for each observation
-    gradlogdensities = compute_gradlogdensities(gradlogdensity, points)
-    # chunk up the data in big batches
-    datachunks = Any[
-        Any[kernel, points, gradlogdensities, weights, sortedcheckpoints, i, ncores]
-        for i in 1:ncores
-    ]
-    # parallelize the work
-    worker_discrepancies = pmap((args) -> compute_kernel_sums(args...), datachunks)
-    # merge the worker results and reweight discrepancies
-    checkpoint_discrepancies = merge_worker_discrepancies(
-        worker_discrepancies
-    )
-    # renormalize the discrepancies
-    checkpoint_discrepancies = renormalize_discrepancies(
-        checkpoint_discrepancies,
-        weights,
-        sortedcheckpoints
-    )
-    # put the discrepancies back in original order
-    discrepancies = Array{Float64}(length(checkpoint_discrepancies))
-    discrepancies[checkpointsindex] = checkpoint_discrepancies
     # stop the timer
-    solvetime = toc()
+    solvetime = elapsed
 
     if nocheckpoints
         return LangevinKernelResult(
@@ -106,7 +107,7 @@ end
 function compute_gradlogdensities(gradlogdensity::Function,
                                   points::Array{Float64,2})
     n, d = size(points)
-    gradlogdensities = @parallel (vcat) for i=1:n
+    gradlogdensities = @distributed (vcat) for i=1:n
         gradlogdensity(points[i,:])'
     end
     gradlogdensities

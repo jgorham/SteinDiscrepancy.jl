@@ -4,7 +4,7 @@
 #
 # where ||.|| is the L2 norm and km is the matern kernel.
 
-type SteinMaternUnboundedPowerKernel <: SteinMaternWeightedKernel
+mutable struct SteinMaternUnboundedPowerKernel <: SteinMaternWeightedKernel
     # the alpha parameter
     alpha::Float64
     # the gamma parameter

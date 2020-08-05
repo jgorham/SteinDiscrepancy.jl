@@ -9,7 +9,7 @@
 #
 # l, u, and basekernel.
 
-type SteinRectangularDomainMetaKernel <: SteinKernel
+mutable struct SteinRectangularDomainMetaKernel <: SteinKernel
     # the base kernel k(x,y)
     basekernel::SteinKernel
     # the lower bound vector (l_1, ..., l_d)

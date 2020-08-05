@@ -7,6 +7,8 @@ module SteinDiscrepancy
 
     using MathProgBase.SolverInterface: AbstractMathProgSolver
     using JuMP
+    using LinearAlgebra
+    using Distributed
 
     import Base.rand
     import DataStructures

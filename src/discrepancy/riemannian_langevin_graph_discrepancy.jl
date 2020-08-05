@@ -49,8 +49,8 @@ function riemannian_langevin_graph_discrepancy(; points=[],
         error("For riemannian langevin methods, you must supply the grad_volatility_covariance")
 
     # Now prepare the coefficients for g and grad g
-    gobjcoefficients = Array{Float64}(n, d)
-    gradgobjcoefficients = Array{Float64}(n, d, d)
+    gobjcoefficients = Array{Float64}(undef, n, d)
+    gradgobjcoefficients = Array{Float64}(undef, n, d, d)
     for i in 1:n
         xi = points[i,:]
         wi = weights[i]
@@ -60,7 +60,7 @@ function riemannian_langevin_graph_discrepancy(; points=[],
         # Objective coefficients for each g(x_i)
         gobjcoefficients[i,:] = 2 * wi * (a * gradlogpxi + grad_a)
         # Objective coefficients for each grad g(x_i)
-        gradgobjcoefficients[i,:,:] = 2 * wi * a
+        gradgobjcoefficients[i,:,:] .= 2 * wi * a
     end
     # solve the optimization problem
     result = affine_graph_discrepancy(sample,

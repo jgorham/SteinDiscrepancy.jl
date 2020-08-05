@@ -9,7 +9,7 @@
 # See http://www.gaussianprocess.org/gpml/chapters/RW4.pdf
 # or http://arxiv.org/pdf/1204.6448.pdf for more details.
 
-type SteinMaternRadialKernel <: SteinMaternWeightedKernel
+mutable struct SteinMaternRadialKernel <: SteinMaternWeightedKernel
     gamma::Float64
 end
 

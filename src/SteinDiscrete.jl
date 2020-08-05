@@ -5,11 +5,11 @@
 # Returns a weighted sample with one row for each distinct row in X and an
 # associated weight equaling the sum of all weights.  Rows are sorted in
 # ascending order if X is univariate.
-function compresssample{T}(X::AbstractArray{T}, q::AbstractArray{Float64})
+function compresssample(X::AbstractArray{T}, q::AbstractArray{Float64}) where T
     n = size(X,1);
     p = size(X,2);
     # Add each row of X with its weight to an accumulator
-    a = DataStructures.Accumulator(Array{T,2},Float64)
+    a = DataStructures.Accumulator{Array{T,2},Float64}()
     for i in 1:n
         push!(a,X[i:i,:],q[i])
     end
@@ -30,7 +30,7 @@ function compresssample{T}(X::AbstractArray{T}, q::AbstractArray{Float64})
     (Xnew, qnew)
 end
 
-type SteinDiscrete
+mutable struct SteinDiscrete
     # n x p matrix of support points
     support::Array{Float64,2}
     # n x 1 vector of weights associated with support points

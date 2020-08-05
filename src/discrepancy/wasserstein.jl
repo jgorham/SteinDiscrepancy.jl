@@ -76,12 +76,12 @@ end
 # discrete distributions.
 #
 # It solves a large LP in order to compute the EMD.
-function wassersteindiscrete{T<:Number}(;
+function wassersteindiscrete(;
     xpoints::AbstractArray{T,2}=[],
     xweights::Array{Float64,1}=fill(1.0/size(xpoints,1), size(xpoints,1)),
     ypoints::AbstractArray{T,2}=[],
     yweights::Array{Float64,1}=fill(1.0/size(ypoints,1), size(ypoints,1)),
-    solver=nothing)
+    solver=nothing) where {T<:Number}
     # make sure samples are same dimensionality
     @assert size(xpoints, 2) == size(ypoints, 2)
     # make sure solver is defined
@@ -113,11 +113,11 @@ end
 # This function computes the earth movers distance between two discrete
 # univariate distributions.
 # This is simply int |F1(z) - F2(z)| dz.
-function wasserstein1d{T<:Number}(;
+function wasserstein1d(;
     xpoints::AbstractArray{T,1}=[],
     xweights::Array{Float64,1}=fill(1.0/length(xpoints), length(xpoints)),
     ypoints::AbstractArray{T,1}=[],
-    yweights::Array{Float64,1}=fill(1.0/size(ypoints,1), size(ypoints,1)))
+    yweights::Array{Float64,1}=fill(1.0/size(ypoints,1), size(ypoints,1))) where {T<:Number}
     # setup discrete distributions
     xdist = SteinDiscrete(xpoints, xweights)
     ydist = SteinDiscrete(ypoints, yweights)
@@ -178,13 +178,13 @@ end
 # 1. We can compute the EMD for two different discrete distributions.
 # 2. The empirical wasserstein metric is root{n}-consistent for the
 # true wasserstein metric.
-function approxwasserstein{T<:Number}(;
+function approxwasserstein(;
     points::AbstractArray{T,2}=[],
     weights::Array{Float64,1}=fill(1.0/size(points,1), size(points,1)),
     targetsamplegen=nothing,
     replicates::Int=30,
     alpha::Float64=0.95,
-    solver=nothing)
+    solver=nothing) where {T<:Number}
     # make sure targetsamplegen is given
     isa(targetsamplegen, Function) ||
         error("Must supply targetsamplegen as a function to generate random samples.")

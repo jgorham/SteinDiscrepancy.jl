@@ -4,7 +4,7 @@
 #
 # where km is the matern kernel.
 
-type SteinMaternPowerKernel <: SteinMaternWeightedKernel
+mutable struct SteinMaternPowerKernel <: SteinMaternWeightedKernel
     # alpha is the exponent on the norms
     alpha::Float64
     # gamma is the rate parameter for the matern kernel
